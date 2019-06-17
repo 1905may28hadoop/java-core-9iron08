@@ -1,5 +1,10 @@
 package com.revature.eval.java.core;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +18,16 @@ public class EvaluationService {
 	 * @param phrase
 	 * @return
 	 */
-	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public String acronym(String phrase)
+	{
+		String str[] = phrase.split(" |-");
+		String acronym = "";
+		
+		for (int i = 0; i < str.length; i++)
+		{
+			acronym+=str[i].charAt(0);
+		}
+		return acronym.toUpperCase();
 	}
 
 	/**
@@ -33,9 +45,49 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public int getScrabbleScore(String string) {
+	public int getScrabbleScore(String string)
+	{
 		// TODO Write an implementation for this method declaration
-		return 0;
+		int score = 0;
+		string = string.toUpperCase();
+		for(int i = 0; i< string.length();i++)
+		{
+			char wordLetter = string.charAt(i);
+			switch (wordLetter)
+			{
+				case 'D':
+				case 'G':
+					score +=2;
+					continue;
+				case 'C':
+				case 'M':
+				case 'P':
+				case 'B':
+					score += 3;
+					continue;
+				case 'F':
+				case 'H':
+				case 'V':
+				case 'W':
+				case 'Y':
+					score += 4;
+					continue;
+				case 'K':
+					score += 5;
+					continue;
+				case 'J':
+				case 'X':
+					score += 8;
+					continue;
+				case 'Q':
+				case 'Z':
+					score += 10;
+					continue;
+				default:
+					score += 1;
+			}
+		}
+		return score;
 	}
 
 	/**
@@ -69,9 +121,29 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public String cleanPhoneNumber(String string)
+	{
+		String phoneNumSplit[];
+		//string = string.replaceAll(" ", "");
+		string = string.replaceAll("\\D","");
+		System.out.println(string);
+		phoneNumSplit = (string.split(""));
+		System.out.println(Arrays.toString(phoneNumSplit));
+		if (string.length() !=10)
+		{
+			throw new IllegalArgumentException();
+		}
+		else 
+		{
+			String phoneNum = "";
+			
+			for(int i = 0; i < phoneNumSplit.length;i++)
+			{
+				
+				phoneNum = phoneNum + phoneNumSplit[i];
+			}
+			return phoneNum;
+		}
 	}
 
 	/**
@@ -83,9 +155,25 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public Map<String, Integer> wordCount(String string) 
+	{
+		Map<String,Integer> countMap = new HashMap<String,Integer>();
+		String splitArr[] = string.split("[\\s\\W]");
+		int occurences = 0;
+		for (int i = 0; i < splitArr.length;i++)
+		{
+			if(countMap.containsKey(splitArr[i]) & !(splitArr[i].equals("")))
+			{
+				occurences = countMap.get(splitArr[i]);
+				countMap.remove(splitArr[i]);
+				countMap.put(splitArr[i],(occurences+1));
+			}
+			else if (!(splitArr[i].equals("")))
+			{
+				countMap.put(splitArr[i],1);
+			}
+		}
+		return countMap;
 	}
 
 	/**
@@ -123,24 +211,62 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T>
+	{
 		private List<T> sortedList;
 
-		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+		public int indexOf(T t)
+		{
+			int searchInt = Integer.parseInt(t.toString());
+			int low = 0 ,mid=0, indexLocation = 0, high=getSortedList().size();
+			List<Integer> listForSearch = new ArrayList<>();
+			
+			if(getSortedList().get(0) instanceof String)
+			{
+				for(T tElement : getSortedList())
+				{
+					listForSearch.add(Integer.parseInt(tElement.toString()));
+				}
+			}
+			else if (getSortedList().get(0) instanceof Integer)
+			{
+				listForSearch.addAll((Collection<? extends Integer>)getSortedList());
+			}
+			
+			while (low<=high)
+			{
+				mid = (low+high)/2;
+				if(listForSearch.get(mid) < searchInt)
+				{
+					low = mid + 1;
+				}
+				else if (listForSearch.get(mid) > searchInt)
+				{
+					high = mid - 1;
+				}
+				else if (listForSearch.get(mid) == searchInt)
+				{
+					return indexLocation = mid;
+				}
+			}
+			
+			return indexLocation = mid;
 		}
 
-		public BinarySearch(List<T> sortedList) {
+		public BinarySearch(List<T> sortedList)
+		{
 			super();
 			this.sortedList = sortedList;
 		}
 
-		public List<T> getSortedList() {
+		public List<T> getSortedList()
+		{
+			
 			return sortedList;
 		}
 
-		public void setSortedList(List<T> sortedList) {
+		public void setSortedList(List<T> sortedList)
+		{
 			this.sortedList = sortedList;
 		}
 
@@ -161,9 +287,15 @@ public class EvaluationService {
 	 * @param input
 	 * @return
 	 */
-	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+	public boolean isArmstrongNumber(int input)
+	{
+		int power = Integer.toString(input).length();
+		int numSum = 0;
+		for(int i=0; i<power;i++)
+		{
+			numSum += Math.pow(Integer.parseInt(Integer.toString(input).substring(i,i+1)), power);
+		}
+		return numSum == input;
 	}
 
 	/**
@@ -176,10 +308,19 @@ public class EvaluationService {
 	 * @param l
 	 * @return
 	 */
-	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
-	}
+	public List<Long> calculatePrimeFactorsOf(long l)
+	{
+        List<Long> factors = new ArrayList<Long>();
+        for (long i = 2; i <= l; i++)
+        {
+            while (l % i == 0)
+            {
+                factors.add(i);
+                l /= i;
+            }
+        }
+        return factors;
+    }
 
 
 	/**
@@ -207,16 +348,37 @@ public class EvaluationService {
 	 *
 	 */
 	static class AtbashCipher {
-
 		/**
 		 * Question 8
 		 * 
 		 * @param string
 		 * @return
 		 */
-		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+		public static String encode(String string)
+		{
+			char input[] = string.toLowerCase().toCharArray();
+			int counter = 0;
+			String encodedOut="";
+			char encodedChar = '\0';
+			for (char l : input)
+			{
+				if((int)l>=97 & (int)l<=122)
+				{
+					if(counter%5 ==0 & counter!=0)
+					{
+						encodedOut = encodedOut+" ";
+					}
+				 	encodedChar = (char) (122-(l-97)); 
+					encodedOut= encodedOut+encodedChar;
+					counter++;
+				}
+				else if((int)l>=48 & (int)l<=57)
+				{
+					encodedOut = encodedOut + l;
+					counter++;
+				}	
+			}
+			return encodedOut;
 		}
 
 		/**
@@ -225,9 +387,36 @@ public class EvaluationService {
 		 * @param string
 		 * @return
 		 */
-		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+		public static String decode(String string)
+		{
+			char input[] = string.toLowerCase().toCharArray();
+			int counter = 0;
+			String encodedOut="";
+			char encodedChar = '\0';
+			for (char l : input)
+			{
+				if((int)l>=97 & (int)l<=122)
+				{
+					if(counter%5 ==0 & counter!=0)
+					{
+						encodedOut +="";
+					}
+					encodedChar = (char) (122-(l-97)); 
+					encodedOut+=encodedChar;
+					counter++;
+				}
+				else if(l!=' ')
+				{
+					if(counter%5 ==0 & counter!=0)
+					{
+						encodedOut +="";
+					}
+					encodedOut+=l;
+					counter++;
+				}
+				
+			}
+			return encodedOut;
 		}
 	}
 
@@ -258,9 +447,33 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	public int solveWordProblem(String string)
+	{
+		String wordArray[] = string.split(" |\\?");
+		Integer num1 = Integer.parseInt(wordArray[2]);
+		Integer num2;
+		try
+		{
+			num2 = Integer.parseInt(wordArray[4]);
+		}
+		catch (Exception e)
+		{
+			num2 = Integer.parseInt(wordArray[5]);
+		}
+		String	operator = wordArray[3];
+		switch (operator)
+		{
+			case "plus":
+				return(num1 + num2);
+			case "minus":
+				return(num1-num2);
+			case "multiplied":
+				return(num1*num2);
+			case "divided":
+				return(num1/num2);
+			default:
+				return 0;
+		}
 	}
 
 }
